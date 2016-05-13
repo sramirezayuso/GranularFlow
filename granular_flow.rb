@@ -42,12 +42,12 @@ def print_next_state(particles, mode, second)
   file.write("#{particles.size + 4}\n") # 4 for the invisible ones at the corners
   file.write("#{second}\n")
   particles.each do |particle|
-    file.write("#{particle.x} #{particle.y} #{particle.vx} #{particle.vy} #{particle.red} #{particle.green} #{particle.blue}\n")
+    file.write("#{particle.x} #{particle.y} #{particle.vx} #{particle.vy} #{particle.radius} #{particle.red} #{particle.green} #{particle.blue}\n")
   end
-  file.write("#{0} #{0} 0 0 0 0 0\n")
-  file.write("#{0} #{L} 0 0 0 0 0\n")
-  file.write("#{W} #{0} 0 0 0 0 0\n")
-  file.write("#{W} #{L} 0 0 0 0 0\n")
+  file.write("#{0} #{0} 0 0 0 0 0 0\n")
+  file.write("#{0} #{L} 0 0 0 0 0 0\n")
+  file.write("#{W} #{0} 0 0 0 0 0 0\n")
+  file.write("#{W} #{L} 0 0 0 0 0 0\n")
   file.close
 end
 
