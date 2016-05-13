@@ -67,6 +67,10 @@ class Particle
     Math.hypot(x - other_particle.x, y - other_particle.y)
   end
 
+  def overlap_with(other_particle)
+    @radius + other_particle.radius - (@position - other_particle.position).magnitude
+  end
+
   # Movement made using Velocity-Verlet algorithm
   def move(time)
     f = force
@@ -78,7 +82,27 @@ class Particle
 
   # Gravitational force
   def force
-    Vector[0, @mass * -9.8]
+    force_x_total = 0
+    force_y_total = @mass * -9.8
+
+    neighbors.each do |other_particle|
+      ξ = overlap_with(other_particle)
+      if ξ > 0 then
+        e_x = (x - other_particle.x) / (@position - other_particle.position).magnitude
+        e_y = (y - other_particle.y) / (@position - other_particle.position).magnitude
+
+        force_normal = -KN * ξ
+        force_tangent = -KT * ξ  * (@v - other_particle.v).magnitude
+
+        force_x = force_normal * e_x + force_tangent * (-e_y)
+        force_y = force_normal * e_y + force_tangent * e_x
+
+        force_x_total += force_x
+        force_y_total += force_y
+      end
+    end
+
+    return Vector[force_x_total, force_y_total]
   end
 
   def angle

@@ -108,7 +108,7 @@ def evaluate_neighbors(grid, cell, other_cell, rc)
 
     particles.each do |p1|
       other_particles.each do |p2|
-        if are_particles_neighbors(p1, p2, rc)
+        if p1.id != p2.id && are_particles_neighbors(p1, p2, rc)
           p1.add_neighbor(p2)
         end
       end

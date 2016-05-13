@@ -52,18 +52,6 @@ def print_next_state(particles, mode, second)
   file.close
 end
 
-# Generates the initial particles inside the silo
-#def generate_particles(d)
-#	until (info = gets.chomp).empty?
-#  		people += [Person.new(info)]
-#	end
-#	particles = []
-#	N.times do
-#		particles.push(Particle.new((rand * W), (rand * L), 1))
-#		# Run Cell Index Method and check against neighbors using particles_overlap?
-#	end
-#end
-
 # Silo dimensions
 L = 4.0
 W = 2.0
@@ -73,6 +61,10 @@ D = 1.0
 d = D/10 # Diameter
 M = 0.01 # Mass
 N = 10 # Amount
+
+# Physics dimensions
+KN = 10**5
+KT = 2 * KN
 
 # Simulation dimensions
 SIMULATION_DELTA_TIME = 0.0001
