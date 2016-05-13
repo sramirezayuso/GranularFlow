@@ -12,7 +12,7 @@ def simulation
 
   actual_time = 0
   while actual_time < SIMULATION_END_TIME do
-    #cim_main(state, m, D/10)
+    cim_main(state, m, D/10)
 
     move(particles, SIMULATION_DELTA_TIME)
     actual_time += SIMULATION_DELTA_TIME

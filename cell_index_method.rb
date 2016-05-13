@@ -123,6 +123,7 @@ end
 
 # Main method
 def cim_main(state, m, rc)
+  return if state.particles.empty?
   raise ArgumentError, "The amount of cells and particle interaction radius are both required" if m == 0 || rc == 0
 
   rmax = state.particles.max {|a, b| a.radius <=> b.radius}.radius
