@@ -67,6 +67,11 @@ class Particle
     Math.hypot(x - other_particle.x, y - other_particle.y)
   end
 
+  # Movement made using some algorithm
+  def move(time)
+    # TBD
+  end
+
   def angle
     w = Vector[1, 0]
     angle = Math.atan2(@v[1], @v[0]) - Math.atan2(w[1], w[0])
@@ -76,27 +81,15 @@ class Particle
 
   # Color methods
   def red
-    if @id == 0 then
-      255
-    else
-      (2 / Math::PI) * angle - (angle**2 / (Math::PI ** 2))
-    end
+    (2 / Math::PI) * angle - (angle**2 / (Math::PI ** 2))
   end
 
   def green
-    if @id == 0 then
-      255
-    else
-      1 - (angle / (2 * Math::PI))
-    end
+    1 - (angle / (2 * Math::PI))
   end
 
   def blue
-    if @id == 0 then
-      0
-    else
-      (angle / (2 * Math::PI))
-    end
+    (angle / (2 * Math::PI))
   end
 
 end
