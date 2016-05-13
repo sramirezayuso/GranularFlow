@@ -12,12 +12,12 @@ def simulation
 
   actual_time = 0
   while actual_time < SIMULATION_END_TIME do
-    cim_main(state, m, D/10)
+    #cim_main(state, m, D/10)
 
     move(particles, SIMULATION_DELTA_TIME)
     actual_time += SIMULATION_DELTA_TIME
 
-    if ((next_frame(actual_time)*10) / (FRAME_DELTA_TIME*10)) % 1 == 0 then # To avoid float error
+    if ((next_frame(actual_time)*1000) / (FRAME_DELTA_TIME*1000)) % 1 == 0 then # To avoid float error
       print_next_state(particles, 'a', next_frame(actual_time))
     end
   end
@@ -27,12 +27,13 @@ end
 def move(particles, time)
   particles.each do |p|
     p.move(time)
+    particles.delete(p) if p.y < -1
   end
 end
 
 # Returns the next frame of a certain time
 def next_frame(time)
-  return (time.round(1) - time > 0 ? time.round(1) : time.round(1) + FRAME_DELTA_TIME).round(1)
+  return (time.round(3) - time > 0 ? time.round(3) : time.round(3) + FRAME_DELTA_TIME).round(3)
 end
 
 # Prints each particle at a given time
@@ -74,9 +75,9 @@ M = 0.01 # Mass
 N = 10 # Amount
 
 # Simulation dimensions
-SIMULATION_DELTA_TIME = 0.1
-SIMULATION_END_TIME = 100
-K = 50
+SIMULATION_DELTA_TIME = 0.0001
+SIMULATION_END_TIME = 1.5
+K = 100
 FRAME_DELTA_TIME = K * SIMULATION_DELTA_TIME
 
 raise ArgumentError, "The dimensions must be L > W > D" if L <= W || L <= D || W <= D

@@ -67,9 +67,18 @@ class Particle
     Math.hypot(x - other_particle.x, y - other_particle.y)
   end
 
-  # Movement made using some algorithm
+  # Movement made using Velocity-Verlet algorithm
   def move(time)
-    # TBD
+    f = force
+    @position = @position + time * @v + (time**2/@mass) * f
+
+    f_new = force
+    @v = @v + (time / (2*@mass)) * (f + f_new)
+  end
+
+  # Gravitational force
+  def force
+    Vector[0, @mass * -9.8]
   end
 
   def angle
