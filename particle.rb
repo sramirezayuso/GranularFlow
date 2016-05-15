@@ -71,6 +71,22 @@ class Particle
     @radius + other_particle.radius - (@position - other_particle.position).magnitude
   end
 
+  def overlap_with_left_wall
+    @radius - Math.hypot(x, 0)
+  end
+
+  def overlap_with_right_wall
+    @radius - Math.hypot(x - W, 0)
+  end
+
+  def overlap_with_top_wall
+    @radius - Math.hypot(y - L, 0)
+  end
+
+  def overlap_with_bottom_wall
+    @radius - Math.hypot(y, 0)
+  end
+
   # Movement made using Velocity-Verlet algorithm
   def move(time)
     f = force
@@ -80,11 +96,12 @@ class Particle
     @v = @v + (time / (2*@mass)) * (f + f_new)
   end
 
-  # Gravitational force
+  # Force acting over the particle
   def force
     force_x_total = 0
     force_y_total = @mass * -9.8
 
+    # Find collisions with other particles
     neighbors.each do |other_particle|
       ξ = overlap_with(other_particle)
       if ξ > 0 then
@@ -100,6 +117,44 @@ class Particle
         force_x_total += force_x
         force_y_total += force_y
       end
+    end
+
+    # Collision with walls
+
+    ξ = overlap_with_left_wall
+    if ξ > 0 then
+      force_normal = KN * ξ
+      force_tangent = -KT * ξ  * vy
+
+      force_x_total += force_normal
+      force_y_total += force_tangent
+    end
+
+    ξ = overlap_with_right_wall
+    if ξ > 0 then
+      force_normal = -KN * ξ
+      force_tangent = -KT * ξ  * vy
+
+      force_x_total += force_normal
+      force_y_total += force_tangent
+    end
+
+    ξ = overlap_with_top_wall
+    if ξ > 0 then
+      force_normal = -KN * ξ
+      force_tangent = -KT * ξ  * vx
+
+      force_x_total += force_tangent
+      force_y_total += force_normal
+    end
+
+    ξ = overlap_with_bottom_wall
+    if ξ > 0 then
+      force_normal = KN * ξ
+      force_tangent = -KT * ξ  * vx
+
+      force_x_total += force_tangent
+      force_y_total += force_normal
     end
 
     return Vector[force_x_total, force_y_total]
