@@ -93,14 +93,14 @@ def calculate_discharge(particles, dis)
 end
 
 # Silo dimensions
-L = 3.0
+L = ARGV[0].to_f
 W = 2.0
 D = 0.5
 
 # Particles dimensions
 d = D/10 # Diameter
 M = 0.01 # Mass
-N = 50 # Amount
+N = ARGV[1].to_i # Amount
 
 # Physics dimensions
 KN = 10**5
