@@ -94,8 +94,7 @@ class Particle
 
   # Force acting over the particle
   def force
-    force_x_total = 0
-    force_y_total = @mass * -9.8
+    force_total = Vector[0, @mass * -9.8]
 
     # Find collisions with other particles
     neighbors.each do |other_particle|
@@ -109,49 +108,32 @@ class Particle
         force_x = force_normal * e[0] + force_tangent * (-e[1])
         force_y = force_normal * e[1] + force_tangent * e[0]
 
-        force_x_total += force_x
-        force_y_total += force_y
+        force_total += Vector[force_x, force_y]
       end
     end
 
     # Collision with walls
     ξ = overlap_with_left_wall
     if ξ > 0 then
-      force_normal = KN * ξ
-      force_tangent = -KT * ξ  * vy
-
-      force_x_total += force_normal
-      force_y_total += force_tangent
+      force_total += Vector[KN * ξ, -KT * ξ  * vy]
     end
 
     ξ = overlap_with_right_wall
     if ξ > 0 then
-      force_normal = -KN * ξ
-      force_tangent = -KT * ξ  * vy
-
-      force_x_total += force_normal
-      force_y_total += force_tangent
+      force_total += Vector[-KN * ξ, -KT * ξ  * vy]
     end
 
     ξ = overlap_with_top_wall
     if ξ > 0 then
-      force_normal = -KN * ξ
-      force_tangent = -KT * ξ  * vx
-
-      force_x_total += force_tangent
-      force_y_total += force_normal
+      force_total += Vector[-KT * ξ  * vx, -KN * ξ]
     end
 
     ξ = overlap_with_bottom_wall
     if ξ > 0 then
-      force_normal = KN * ξ
-      force_tangent = -KT * ξ  * vx
-
-      force_x_total += force_tangent
-      force_y_total += force_normal
+      force_total += Vector[-KT * ξ  * vx, KN * ξ]
     end
 
-    return Vector[force_x_total, force_y_total]
+    return force_total
   end
 
   def angle
