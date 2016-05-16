@@ -66,9 +66,9 @@ KN = 10**5
 KT = 2 * KN
 
 # Simulation dimensions
-SIMULATION_DELTA_TIME = 0.00001
+SIMULATION_DELTA_TIME = 10**-5
 SIMULATION_END_TIME = 1.5
-K = 100
+K = 1000
 FRAME_DELTA_TIME = K * SIMULATION_DELTA_TIME
 
 raise ArgumentError, "The dimensions must be L > W > D" if L <= W || L <= D || W <= D

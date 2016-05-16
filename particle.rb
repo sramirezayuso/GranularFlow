@@ -101,16 +101,13 @@ class Particle
     neighbors.each do |other_particle|
       ξ = overlap_with(other_particle)
       if ξ > 0 then
-        dist = distance_to(other_particle)
-        pos_dif = @position - other_particle.position
-        e_x = (pos_dif[0]) / dist
-        e_y = (pos_dif[1]) / dist
+        e = (@position - other_particle.position) / distance_to(other_particle)
 
         force_normal = KN * ξ
-        force_tangent = -KT * ξ  * ((@v - other_particle.v).dot(Vector[-e_y, e_x]))
+        force_tangent = -KT * ξ  * ((@v - other_particle.v).dot(Vector[-e[1], e[0]]))
 
-        force_x = force_normal * e_x + force_tangent * (-e_y)
-        force_y = force_normal * e_y + force_tangent * e_x
+        force_x = force_normal * e[0] + force_tangent * (-e[1])
+        force_y = force_normal * e[1] + force_tangent * e[0]
 
         force_x_total += force_x
         force_y_total += force_y
