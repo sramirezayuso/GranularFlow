@@ -68,19 +68,28 @@ class Particle
   end
 
   def overlap_with_left_wall
-    @radius - Math.hypot(x, 0)
+    overlap_with_wall(x)
   end
 
   def overlap_with_right_wall
-    @radius - Math.hypot(x - W, 0)
+    overlap_with_wall(x - W)
   end
 
   def overlap_with_top_wall
-    @radius - Math.hypot(y - L, 0)
+    overlap_with_wall(y - L)
   end
 
   def overlap_with_bottom_wall
-    @radius - Math.hypot(y, 0)
+    overlap_with_wall(y)
+  end
+
+  def overlap_with_wall(num)
+    @radius - num.abs
+  end
+
+  def touching_hole
+    return false if D == 0
+    x - @radius > ((W - D) / 2) && x + @radius < ((W + D) / 2)
   end
 
   # Movement made using Velocity-Verlet algorithm
@@ -129,7 +138,7 @@ class Particle
     end
 
     ξ = overlap_with_bottom_wall
-    if ξ > 0 then
+    if ξ > 0 && !touching_hole then
       force_total += Vector[-KT * ξ  * vx, KN * ξ]
     end
 
