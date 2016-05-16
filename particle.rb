@@ -122,24 +122,26 @@ class Particle
     end
 
     # Collision with walls
-    ξ = overlap_with_left_wall
-    if ξ > 0 then
-      force_total += Vector[KN * ξ, -KT * ξ  * vy]
-    end
+    if y + @radius > 0 then
+      ξ = overlap_with_left_wall
+      if ξ > 0 then
+        force_total += Vector[KN * ξ, -KT * ξ  * vy]
+      end
 
-    ξ = overlap_with_right_wall
-    if ξ > 0 then
-      force_total += Vector[-KN * ξ, -KT * ξ  * vy]
-    end
+      ξ = overlap_with_right_wall
+      if ξ > 0 then
+        force_total += Vector[-KN * ξ, -KT * ξ  * vy]
+      end
 
-    ξ = overlap_with_top_wall
-    if ξ > 0 then
-      force_total += Vector[-KT * ξ  * vx, -KN * ξ]
-    end
+      ξ = overlap_with_top_wall
+      if ξ > 0 then
+        force_total += Vector[-KT * ξ  * vx, -KN * ξ]
+      end
 
-    ξ = overlap_with_bottom_wall
-    if ξ > 0 && !touching_hole then
-      force_total += Vector[-KT * ξ  * vx, KN * ξ]
+      ξ = overlap_with_bottom_wall
+      if ξ > 0 && !touching_hole then
+        force_total += Vector[-KT * ξ  * vx, KN * ξ]
+      end
     end
 
     return force_total

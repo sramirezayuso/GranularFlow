@@ -44,16 +44,21 @@ end
 def print_next_state(particles, mode, second)
   Dir.mkdir("out") unless File.exists?("out")
   file = File.open("./out/particles.txt", mode)
-  file.write("#{particles.size + 4}\n") # 4 for the invisible ones at the corners
+  file.write("#{particles.size + 5}\n") # 5 for the fake walls
   file.write("#{second}\n")
   particles.each do |particle|
-    file.write("#{particle.x} #{particle.y} #{particle.vx} #{particle.vy} #{particle.radius} #{particle.red} #{particle.green} #{particle.blue}\n")
+    file.write("#{particle.x} #{particle.y} 0 0 #{particle.radius} #{particle.red} #{particle.green} #{particle.blue}\n")
   end
-  file.write("#{0} #{-1} 0 0 0 0 0 0\n")
-  file.write("#{0} #{L} 0 0 0 0 0 0\n")
-  file.write("#{W} #{-1} 0 0 0 0 0 0\n")
-  file.write("#{W} #{L} 0 0 0 0 0 0\n")
+  print_walls(file)
   file.close
+end
+
+def print_walls(file)
+  file.write("#{0} #{0} #{(W - D) / 2} 0 0 0 0 0\n")
+  file.write("#{W} #{0} #{-(W - D) / 2} 0 0 0 0 0\n")
+  file.write("#{0} #{L} 0 #{-L} 0 0 0 0\n")
+  file.write("#{0} #{L} #{W} 0 0 0 0 0\n")
+  file.write("#{W} #{L} 0 #{-L} 0 0 0 0\n")
 end
 
 # Silo dimensions
