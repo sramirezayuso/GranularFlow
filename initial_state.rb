@@ -7,7 +7,7 @@ require './particle.rb'
 # Generate the random particles and the sun
 def generate_particles(radius)
   particles = Set.new
-  N.times do
+  30.times do
     position = random_position(particles, radius)
     new_particle = Particle.new(radius, M, position, Vector[0,0])
     particles.add(new_particle)
@@ -21,8 +21,8 @@ def random_position(particles, radius)
   y = nil
 
   loop do 
-    x = rand(0..W)
-    y = L - radius
+    x = rand(0..W-radius)
+    y = rand(0..L-radius)
     break if verify_new_position(x, y, radius, particles)
   end 
 

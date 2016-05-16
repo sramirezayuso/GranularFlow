@@ -60,14 +60,13 @@ D = 1.0
 # Particles dimensions
 d = D/10 # Diameter
 M = 0.01 # Mass
-N = 10 # Amount
 
 # Physics dimensions
 KN = 10**5
 KT = 2 * KN
 
 # Simulation dimensions
-SIMULATION_DELTA_TIME = 0.0001
+SIMULATION_DELTA_TIME = 0.00001
 SIMULATION_END_TIME = 1.5
 K = 100
 FRAME_DELTA_TIME = K * SIMULATION_DELTA_TIME

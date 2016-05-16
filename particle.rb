@@ -51,10 +51,6 @@ class Particle
     @v[1]
   end
 
-  def angular_momentum
-    @v.magnitude * @mass * @position.magnitude
-  end
-
   def add_neighbor(particle)
     @neighbors.add(particle)
   end
@@ -68,7 +64,7 @@ class Particle
   end
 
   def overlap_with(other_particle)
-    @radius + other_particle.radius - (@position - other_particle.position).magnitude
+    @radius + other_particle.radius - distance_to(other_particle)
   end
 
   def overlap_with_left_wall
@@ -105,11 +101,13 @@ class Particle
     neighbors.each do |other_particle|
       ξ = overlap_with(other_particle)
       if ξ > 0 then
-        e_x = (x - other_particle.x) / (@position - other_particle.position).magnitude
-        e_y = (y - other_particle.y) / (@position - other_particle.position).magnitude
+        dist = distance_to(other_particle)
+        pos_dif = @position - other_particle.position
+        e_x = (pos_dif[0]) / dist
+        e_y = (pos_dif[1]) / dist
 
-        force_normal = -KN * ξ
-        force_tangent = -KT * ξ  * (@v - other_particle.v).magnitude
+        force_normal = KN * ξ
+        force_tangent = -KT * ξ  * ((@v - other_particle.v).dot(Vector[-e_y, e_x]))
 
         force_x = force_normal * e_x + force_tangent * (-e_y)
         force_y = force_normal * e_y + force_tangent * e_x
@@ -120,7 +118,6 @@ class Particle
     end
 
     # Collision with walls
-
     ξ = overlap_with_left_wall
     if ξ > 0 then
       force_normal = KN * ξ
