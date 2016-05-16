@@ -7,6 +7,7 @@ require './initial_state.rb'
 def simulation
   particles = generate_particles((D/10)/2)
   cin = []
+  dis = []
   m = (5 * L / D) - 1
   state = State.new(L, L / m.to_f, particles.size, particles)
   print_next_state(particles, 'w', 0)
@@ -21,9 +22,11 @@ def simulation
     if must_print_state(actual_time) then
       print_next_state(particles, 'a', next_frame(actual_time))
       calculate_energy(particles, cin)
+      calculate_discharge(particles, dis)
     end
   end
-  print_energies(cin)
+  print_metric(cin, "energy.txt")
+  print_metric(dis, "discharge.txt")
 end
 
 # Moves all the particles a certain time
@@ -64,7 +67,16 @@ def print_walls(file)
   file.write("#{W} #{L} 0 #{-L} 0 0 0 0\n")
 end
 
-# Energy Methods
+def print_metric(array, file_name)
+  Dir.mkdir("out") unless File.exists?("out")
+  file = File.open("./out/#{file_name}", 'w')
+  array.each do |a|
+    file.write("#{a}\n")
+  end
+  file.close
+end
+
+# Energy methods
 def calculate_energy(particles, cin)
   cin_energy = 0
   particles.each do |p|
@@ -73,13 +85,11 @@ def calculate_energy(particles, cin)
   cin.push(cin_energy)
 end
 
-def print_energies(cin)
-  Dir.mkdir("out") unless File.exists?("out")
-  file = File.open("./out/energy.txt", 'w')
-  cin.each do |c|
-    file.write("#{c}\n")
-  end
-  file.close
+# Discharge methods
+def calculate_discharge(particles, dis)
+  ppa = particles.size / (L * W)
+  q = ppa * Math.sqrt(G) * (D - ((D/10)/2))**1.5
+  dis.push(q)
 end
 
 # Silo dimensions
@@ -95,6 +105,7 @@ N = 50 # Amount
 # Physics dimensions
 KN = 10**5
 KT = 2 * KN
+G = 9.8
 
 # Simulation dimensions
 SIMULATION_ORDER = 5

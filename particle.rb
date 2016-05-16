@@ -103,7 +103,7 @@ class Particle
 
   # Force acting over the particle
   def force
-    force_total = Vector[0, @mass * -9.8]
+    force_total = Vector[0, @mass * -G]
 
     # Find collisions with other particles
     neighbors.each do |other_particle|
