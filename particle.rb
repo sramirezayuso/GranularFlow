@@ -147,6 +147,11 @@ class Particle
     return force_total
   end
 
+  # Energy methods
+  def cinetic_energy
+    0.5 * @mass * @v.magnitude**2
+  end
+
   def angle
     w = Vector[1, 0]
     angle = Math.atan2(@v[1], @v[0]) - Math.atan2(w[1], w[0])

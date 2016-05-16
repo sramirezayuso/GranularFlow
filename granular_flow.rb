@@ -6,6 +6,7 @@ require './initial_state.rb'
 
 def simulation
   particles = generate_particles((D/10)/2)
+  cin = []
   m = (5 * L / D) - 1
   state = State.new(L, L / m.to_f, particles.size, particles)
   print_next_state(particles, 'w', 0)
@@ -19,8 +20,10 @@ def simulation
 
     if must_print_state(actual_time) then
       print_next_state(particles, 'a', next_frame(actual_time))
+      calculate_energy(particles, cin)
     end
   end
+  print_energies(cin)
 end
 
 # Moves all the particles a certain time
@@ -61,14 +64,33 @@ def print_walls(file)
   file.write("#{W} #{L} 0 #{-L} 0 0 0 0\n")
 end
 
+# Energy Methods
+def calculate_energy(particles, cin)
+  cin_energy = 0
+  particles.each do |p|
+    cin_energy += p.cinetic_energy
+  end
+  cin.push(cin_energy)
+end
+
+def print_energies(cin)
+  Dir.mkdir("out") unless File.exists?("out")
+  file = File.open("./out/energy.txt", 'w')
+  cin.each do |c|
+    file.write("#{c}\n")
+  end
+  file.close
+end
+
 # Silo dimensions
-L = 4.0
+L = 3.0
 W = 2.0
-D = 1.0
+D = 0.5
 
 # Particles dimensions
 d = D/10 # Diameter
 M = 0.01 # Mass
+N = 50 # Amount
 
 # Physics dimensions
 KN = 10**5
@@ -77,7 +99,7 @@ KT = 2 * KN
 # Simulation dimensions
 SIMULATION_ORDER = 5
 SIMULATION_DELTA_TIME = 10**-SIMULATION_ORDER
-SIMULATION_END_TIME = 3.0
+SIMULATION_END_TIME = 5.0
 K = 1000
 FRAME_DELTA_TIME = K * SIMULATION_DELTA_TIME
 
