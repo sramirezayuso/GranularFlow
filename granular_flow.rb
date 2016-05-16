@@ -6,7 +6,7 @@ require './initial_state.rb'
 
 def simulation
   particles = generate_particles((D/10)/2)
-  m = 1 # Change this
+  m = (5 * L / D) - 1
   state = State.new(L, L / m.to_f, particles.size, particles)
   print_next_state(particles, 'w', 0)
 
@@ -17,7 +17,7 @@ def simulation
     move(particles, SIMULATION_DELTA_TIME)
     actual_time += SIMULATION_DELTA_TIME
 
-    if ((next_frame(actual_time)*1000) / (FRAME_DELTA_TIME*1000)) % 1 == 0 then # To avoid float error
+    if must_print_state(actual_time) then
       print_next_state(particles, 'a', next_frame(actual_time))
     end
   end
@@ -31,9 +31,13 @@ def move(particles, time)
   end
 end
 
+def must_print_state(time)
+  ((next_frame(time)*(10**SIMULATION_ORDER)) / (FRAME_DELTA_TIME*(10**SIMULATION_ORDER))) % 1 == 0
+end
+
 # Returns the next frame of a certain time
 def next_frame(time)
-  return (time.round(3) - time > 0 ? time.round(3) : time.round(3) + FRAME_DELTA_TIME).round(3)
+  return (time.round(SIMULATION_ORDER) - time > 0 ? time.round(SIMULATION_ORDER) : time.round(SIMULATION_ORDER) + FRAME_DELTA_TIME).round(SIMULATION_ORDER)
 end
 
 # Prints each particle at a given time
@@ -45,9 +49,9 @@ def print_next_state(particles, mode, second)
   particles.each do |particle|
     file.write("#{particle.x} #{particle.y} #{particle.vx} #{particle.vy} #{particle.radius} #{particle.red} #{particle.green} #{particle.blue}\n")
   end
-  file.write("#{0} #{0} 0 0 0 0 0 0\n")
+  file.write("#{0} #{-1} 0 0 0 0 0 0\n")
   file.write("#{0} #{L} 0 0 0 0 0 0\n")
-  file.write("#{W} #{0} 0 0 0 0 0 0\n")
+  file.write("#{W} #{-1} 0 0 0 0 0 0\n")
   file.write("#{W} #{L} 0 0 0 0 0 0\n")
   file.close
 end
@@ -66,8 +70,9 @@ KN = 10**5
 KT = 2 * KN
 
 # Simulation dimensions
-SIMULATION_DELTA_TIME = 10**-5
-SIMULATION_END_TIME = 1.5
+SIMULATION_ORDER = 5
+SIMULATION_DELTA_TIME = 10**-SIMULATION_ORDER
+SIMULATION_END_TIME = 3.0
 K = 1000
 FRAME_DELTA_TIME = K * SIMULATION_DELTA_TIME
 
