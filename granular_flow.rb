@@ -33,8 +33,8 @@ end
 def move(particles, time)
   particles.each do |p|
     p.move(time)
-    particles.delete(p) if p.y < -1
   end
+  particles.delete_if { |p| p.y < -1  || (p.y < 0 && p.vy > 0) }
 end
 
 def must_print_state(time)
