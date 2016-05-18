@@ -5,10 +5,12 @@ Simulation of flow in a granular system
 ## Usage
 
 ```sh
-ruby granular_flow.rb
+ruby granular_flow.rb [Length of silo] [Particles amount]
 ```
 
 Output in .xyz format to be used in [OVITO](http://www.ovito.org/)
+
+![example](http://i.imgur.com/KVm9vsN.gif)
 
 ## Contributing
 
